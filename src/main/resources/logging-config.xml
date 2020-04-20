@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration >
+<configuration status="WARN">
+    <property name="LOG_PROJECT_NAME" value="kakaopay-preexam" />
+    <property name="LOG_DIR" value="~/kakaopay-preexam/logs" />
+    <property name="LOG_LEVEL" value="INFO" />
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender" target="SYSTEM_OUT">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${LOG_LEVEL}</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_PROJECT_NAME}.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${LOG_PROJECT_NAME}.%i.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Append 대상을 반드시 appender-ref 태그 않에 넣어줘야 한다. -->
+    <logger name="org.springframework.core" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="Console" />
+        <appender-ref ref="RollingFile" />
+    </logger>
+    <logger name="com.kakaopay.preexam" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="Console" />
+        <appender-ref ref="RollingFile" />
+    </logger>
+    <!-- JDBC LOG -->
+    <logger name="jdbc" level="OFF" additivity="false" />
+    <logger name="jdbc.sqlonly" level="OFF" additivity="false" />
+    <logger name="jdbc.sqltiming" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="Console" />
+        <appender-ref ref="RollingFile" />
+    </logger>
+    <logger name="jdbc.audit" level="OFF" additivity="false" />
+    <logger name="jdbc.connection" level="OFF" additivity="false" />
+
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="Console" />
+        <appender-ref ref="RollingFile" />
+    </root>
+</configuration>

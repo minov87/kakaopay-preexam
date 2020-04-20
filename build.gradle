@@ -1,0 +1,49 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+}
+
+group = 'com.kakaopay.preexam'
+version = '0.0.1'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter')
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty") // 대용량 트레픽을 고려하여 tomcat 에서 jetty 로 변경
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.3'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.10.3'
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.3.1.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.3.1.RELEASE'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+}
+
+test {
+    useJUnitPlatform()
+}

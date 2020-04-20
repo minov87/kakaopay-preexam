@@ -1,0 +1,26 @@
+#DEFAULT
+spring:
+  profiles:
+    active: default
+  application:
+    name: KakaoPayPreExam
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:preexam
+      username: minov
+      password:
+      driver-class-name: org.h2.Driver
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 30000
+      connection-timeout: 30000
+  jpa:
+    generate-ddl: true
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+#LOG
+logging:
+  config: classpath:logging-config.xml
