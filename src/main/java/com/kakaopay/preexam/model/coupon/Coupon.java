@@ -2,6 +2,7 @@ package com.kakaopay.preexam.model.coupon;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,8 +11,9 @@ import java.util.Date;
 @Entity
 @Table(name = "coupons")
 public class Coupon {
+    // GenerationType.AUTO 설정시 테이블 기본 시퀀스를 기반 사용 되므로 IDENTITY 정의
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 

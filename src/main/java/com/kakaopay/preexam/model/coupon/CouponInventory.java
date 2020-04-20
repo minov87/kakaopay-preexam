@@ -3,6 +3,8 @@ package com.kakaopay.preexam.model.coupon;
 import com.kakaopay.preexam.model.account.Account;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,7 +14,7 @@ import java.util.Date;
 @Table(name = "coupon_inventory")
 public class CouponInventory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
@@ -29,6 +31,7 @@ public class CouponInventory {
 
     @Column(name = "use_time")
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date useTime;
 
     @CreationTimestamp
@@ -39,13 +42,4 @@ public class CouponInventory {
     @Column(name = "expire_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date expireTime;
-
-    public CouponInventory() {}
-    public CouponInventory(Coupon coupon, Account account, String status, Date useTime, Date expireTime){
-        this.coupon = coupon;
-        this.account = account;
-        this.status = status;
-        this.useTime = useTime;
-        this.expireTime = expireTime;
-    }
 }
