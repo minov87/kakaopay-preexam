@@ -19,12 +19,13 @@ repositories {
 }
 
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter')
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
     compile("org.springframework.boot:spring-boot-starter-jetty") // 대용량 트레픽을 고려하여 tomcat 에서 jetty 로 변경
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile("org.springframework.boot:spring-boot-starter-data-jpa") {
+        exclude group: 'org.apache.tomcat', module: 'tomcat-jdbc'
+    }
 
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.3'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.10.3'
