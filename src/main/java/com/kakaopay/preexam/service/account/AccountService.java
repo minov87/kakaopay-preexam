@@ -1,5 +1,6 @@
 package com.kakaopay.preexam.service.account;
 
+import com.kakaopay.preexam.exception.AccountException;
 import com.kakaopay.preexam.model.account.Account;
 import com.kakaopay.preexam.model.account.AccountParams;
 import com.kakaopay.preexam.model.token.Token;
@@ -40,7 +41,7 @@ public class AccountService {
     public Token signUp(AccountParams params) throws Exception {
         // 기 가입된 사용자 인지 확인
         if(accountRepository.existsByName(params.getName())) {
-            throw new Exception("fail to sign up - already exist");
+            throw AccountException.ACCOUNT_ALREADY_EXIST;
         }
 
         // 화원가입 진행
@@ -63,13 +64,13 @@ public class AccountService {
     public Token signIn(AccountParams params) throws Exception {
         // 사용자 계정 확인
         Account account = accountRepository.findFirstByName(params.getName())
-                .orElseThrow(() -> new Exception("fail to sign in - not exist"));
+                .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
 
         // 비밀번호 검증
         if(passwordEncoder.matches(params.getPassword(), account.getPassword())) {
             return getToken(account.getId());
         } else {
-            throw new Exception("fail to sign in - wrong information");
+            throw AccountException.ACCOUNT_WRONG_PASSWORD;
         }
     }
 
