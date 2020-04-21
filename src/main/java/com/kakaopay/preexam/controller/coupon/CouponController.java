@@ -113,14 +113,30 @@ public class CouponController {
         }
     }
 
-    /*
-    // 지급된 쿠폰 사용 취소 API
-    @PostMapping("/redeem/cancel", produces = MediaType.APPLICATION_JSON_VALUE)
+    /**
+     * 지급된 쿠폰 사용 취소 API
+     *
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/redeem/cancel", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response couponRedeemCancel(
-            @RequestParam(name = "accountId") Long accountId,
-            @RequestParam(name = "couponCode") String couponCode) throws Exception {
+            @RequestBody(required = true) CouponParams param) throws Exception {
+        if (param.getAccountId() == null || param.getCouponCode() == null) {
+            return Response.builder().code(HttpStatus.BAD_REQUEST.value()).msg("invalid parameter").build();
+        }
+
+        try {
+            couponService.couponRedeemCancel(param);
+            return Response.builder().code(HttpStatus.OK.value()).msg("success").build();
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Response.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).msg(e.getMessage()).build();
+        }
     }
 
+    /*
     // 당일 만료 쿠폰 목록 조회 API
     @GetMapping("/expired/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response getExpiredCouponList() throws Exception {
