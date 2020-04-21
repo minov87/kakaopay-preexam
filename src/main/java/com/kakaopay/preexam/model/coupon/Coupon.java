@@ -33,7 +33,7 @@ public class Coupon implements Serializable {
     private String type;
 
     @Column(name = "isvalid")
-    private int isvalid = 0;
+    private int isvalid;
 
     @CreationTimestamp
     @Column(name = "create_time", nullable = false)
