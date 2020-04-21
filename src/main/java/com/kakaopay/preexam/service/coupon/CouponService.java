@@ -2,8 +2,8 @@ package com.kakaopay.preexam.service.coupon;
 
 import com.kakaopay.preexam.model.account.Account;
 import com.kakaopay.preexam.model.coupon.Coupon;
-import com.kakaopay.preexam.model.coupon.CouponInfo;
 import com.kakaopay.preexam.model.coupon.CouponInventory;
+import com.kakaopay.preexam.model.coupon.CouponInventoryResult;
 import com.kakaopay.preexam.model.coupon.CouponParams;
 import com.kakaopay.preexam.repository.account.AccountRepository;
 import com.kakaopay.preexam.repository.coupon.CouponInventoryRepository;
@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -39,8 +40,6 @@ public class CouponService {
     @PersistenceContext
     private EntityManager em;
 
-    private Calendar cal = Calendar.getInstance();
-
     /**
      * 랜덤 쿠폰 N개 생성
      *
@@ -48,11 +47,10 @@ public class CouponService {
      * @throws Exception
      */
     @Transactional
-    public void makeCoupon(int count) throws Exception {
-        cal.add(Calendar.YEAR, 1);
-        Date expireDate = cal.getTime();
+    public void makeCoupon(int count) {
+        LocalDateTime expireDate = LocalDateTime.now().plus(Period.ofYears(1));
 
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             Coupon coupon = new Coupon();
             coupon.setType("CREATE");
             coupon.setIsvalid(0);
@@ -61,7 +59,7 @@ public class CouponService {
             em.persist(coupon);
 
             // 메모리 오류 방지 및 통신비용 감소를 위한 영속화
-            if(i % 500 == 0) {
+            if (i % 500 == 0) {
                 em.flush();
                 em.clear();
             }
@@ -79,9 +77,10 @@ public class CouponService {
      * @throws Exception
      */
     @Transactional
-    public CouponInfo couponGive(CouponParams params) throws Exception {
+    public CouponInventoryResult couponGive(CouponParams params) throws Exception {
         // 지급할 미사용 쿠폰 1개 조회
-        Date expireDate = cal.getTime();
+        LocalDateTime expireDate = LocalDateTime.now();
+
         Account account = accountRepository.findById(params.getAccountId())
                 .orElseThrow(() -> new Exception("not exist account"));
         Coupon coupon = couponRepository.findTop1ByIsvalidEqualsAndExpireTimeGreaterThanEqualOrderByCreateTimeAsc(0, expireDate)
@@ -101,12 +100,27 @@ public class CouponService {
         couponRepository.save(coupon);
 
         // 반환 데이터 정의
-        CouponInfo couponInfo = new CouponInfo();
-        couponInfo.setCouponCode(coupon.getCouponCode());
-        couponInfo.setExpireTime(couponInventory.getExpireTime());
-        couponInfo.setStatus(couponInventory.getStatus());
+        CouponInventoryResult couponInventoryResult = new CouponInventoryResult();
+        couponInventoryResult.setCouponCode(coupon.getCouponCode());
+        couponInventoryResult.setExpireTime(couponInventory.getExpireTime());
+        couponInventoryResult.setStatus(couponInventory.getStatus());
 
         // 등록된 쿠폰 정보 반환
-        return couponInfo;
+        return couponInventoryResult;
+    }
+
+    /**
+     * 사용자 지급 쿠폰 조회
+     *
+     * @param params
+     * @return
+     */
+    public List<CouponInventoryResult> getGiveCouponList(CouponParams params) throws Exception {
+        Account account = accountRepository.findById(params.getAccountId())
+                .orElseThrow(() -> new Exception("not exist account"));
+
+        List<CouponInventoryResult> couponInventoryResultList = couponInventoryRepository.findUserCouponList(params.getAccountId());
+
+        return couponInventoryResultList;
     }
 }
