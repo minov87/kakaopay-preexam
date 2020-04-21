@@ -22,7 +22,7 @@ public class CouponController {
     /**
      * 랜덤 쿠폰 N개 생성 API
      *
-     * @param param
+     * @param param 셍성 갯수
      * @return
      * @throws Exception
      */
@@ -45,7 +45,7 @@ public class CouponController {
     /**
      * 사용자에게 쿠폰 지급 API
      *
-     * @param param
+     * @param param 사용자 ID
      * @return
      * @throws Exception
      */
@@ -68,7 +68,7 @@ public class CouponController {
     /**
      * 사용자 지급 쿠폰 조회 API
      *
-     * @param param
+     * @param param 사용자 ID
      * @return
      */
     @GetMapping(value = "/give/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -90,13 +90,12 @@ public class CouponController {
     /**
      * 지급된 쿠폰 사용 API
      *
-     * @param param
+     * @param param 사용자 ID, 쿠폰 번호
      * @return
-     * @throws Exception
      */
     @PostMapping(value = "/redeem", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response couponRedeem(
-            @RequestBody(required = true) CouponParams param) throws Exception {
+            @RequestBody(required = true) CouponParams param) {
         if(param.getAccountId() == null || param.getCouponCode() == null) {
             return Response.builder().code(HttpStatus.BAD_REQUEST.value()).msg("invalid parameter").build();
         }
@@ -113,13 +112,12 @@ public class CouponController {
     /**
      * 지급된 쿠폰 사용 취소 API
      *
-     * @param param
+     * @param param 사용자 ID, 쿠폰 번호
      * @return
-     * @throws Exception
      */
     @PostMapping(value = "/redeem/cancel", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response couponRedeemCancel(
-            @RequestBody(required = true) CouponParams param) throws Exception {
+            @RequestBody(required = true) CouponParams param) {
         if (param.getAccountId() == null || param.getCouponCode() == null) {
             return Response.builder().code(HttpStatus.BAD_REQUEST.value()).msg("invalid parameter").build();
         }
@@ -137,10 +135,9 @@ public class CouponController {
      * 발급된 쿠폰 중 당일 만료된 쿠폰 목록 조회 API
      *
      * @return
-     * @throws Exception
      */
     @GetMapping(value = "/expired/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response getExpiredCouponList() throws Exception {
+    public Response getExpiredCouponList() {
         try {
             List<CouponInventoryResult> couponInventoryResultList = couponService.getExpiredCouponList();
             return Response.builder().code(HttpStatus.OK.value()).data(couponInventoryResultList).build();
