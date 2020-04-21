@@ -1,5 +1,7 @@
 package com.kakaopay.preexam.service.coupon;
 
+import com.kakaopay.preexam.exception.AccountException;
+import com.kakaopay.preexam.exception.CouponException;
 import com.kakaopay.preexam.model.account.Account;
 import com.kakaopay.preexam.model.coupon.Coupon;
 import com.kakaopay.preexam.model.coupon.CouponInventory;
@@ -50,27 +52,31 @@ public class CouponService {
      * @throws Exception
      */
     @Transactional
-    public void makeCoupon(int count) {
-        LocalDateTime expireDate = nowDateTime.plus(Period.ofYears(1));
+    public void makeCoupon(int count) throws Exception {
+        try {
+            LocalDateTime expireDate = nowDateTime.plus(Period.ofYears(1));
 
-        for (int i = 0; i < count; i++) {
-            Coupon coupon = Coupon.builder()
-                    .couponCode(CouponUtil.generateCoupon())
-                    .type("CREATE")
-                    .isvalid(0)
-                    .expireTime(expireDate)
-                    .build();
-            em.persist(coupon);
+            for (int i = 0; i < count; i++) {
+                Coupon coupon = Coupon.builder()
+                        .couponCode(CouponUtil.generateCoupon())
+                        .type("CREATE")
+                        .isvalid(0)
+                        .expireTime(expireDate)
+                        .build();
+                em.persist(coupon);
 
-            // 메모리 오류 방지 및 통신비용 감소를 위한 영속화
-            if (i % 500 == 0) {
-                em.flush();
-                em.clear();
+                // 메모리 오류 방지 및 통신비용 감소를 위한 영속화
+                if (i % 500 == 0) {
+                    em.flush();
+                    em.clear();
+                }
             }
-        }
 
-        em.flush();
-        em.clear();
+            em.flush();
+            em.clear();
+        } catch (Exception e) {
+            throw CouponException.COUPON_MAKE_FAIL;
+        }
     }
 
     /**
@@ -84,9 +90,9 @@ public class CouponService {
     public CouponInventoryResult couponGive(CouponParams params) throws Exception {
         // 지급할 사용자 및 지급할 미사용 쿠폰 1개 조회
         Account account = accountRepository.findById(params.getAccountId())
-                .orElseThrow(() -> new Exception("not exist account"));
+                .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
         Coupon coupon = couponRepository.findTop1ByIsvalidEqualsAndExpireTimeGreaterThanEqualOrderByCreateTimeAsc(0, nowDateTime)
-                .orElseThrow(() -> new Exception("not enouth coupons"));
+                .orElseThrow(() -> CouponException.COUPON_NOT_ENOUGH);
 
         // 지급할 미사용 쿠폰 정보를 지급 쿠폰함에 등록
         CouponInventory couponInventory = CouponInventory.builder()
@@ -121,7 +127,7 @@ public class CouponService {
     public List<CouponInventoryResult> getGiveCouponList(CouponParams params) throws Exception {
         // 지급할 사용자 조회
         Account account = accountRepository.findById(params.getAccountId())
-                .orElseThrow(() -> new Exception("not exist account"));
+                .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
 
         return couponInventoryRepository.findUserCouponList(params.getAccountId());
     }
@@ -135,11 +141,11 @@ public class CouponService {
     public void couponRedeem(CouponParams params) throws Exception {
         // 지급할 사용자 조회
         Account account = accountRepository.findById(params.getAccountId())
-                .orElseThrow(() -> new Exception("not exist account"));
+                .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
 
         // 쿠폰 코드와 사용자 정보가 매칭되는 쿠폰 보관함 정보 조회
         CouponInventory userCouponInventory = couponInventoryRepository.findMatchedCouponInventoryDetail(params.getAccountId(), params.getCouponCode())
-                .orElseThrow(() -> new Exception("fail to redeem - not exist matched coupon"));
+                .orElseThrow(() -> CouponException.COUPON_NOT_EXIST);
 
         // 쿠폰 사용 처리
         // 만약 이미 사용 처리된 쿠폰인 경우 불가 처리
@@ -150,7 +156,7 @@ public class CouponService {
 
             couponInventoryRepository.save(couponInventory);
         } else {
-            throw new Exception("fail to redeem - already used.");
+            throw CouponException.COUPON_ALREADY_USED;
         }
     }
 
@@ -163,11 +169,11 @@ public class CouponService {
     public void couponRedeemCancel(CouponParams params) throws Exception {
         // 지급할 사용자 조회
         Account account = accountRepository.findById(params.getAccountId())
-                .orElseThrow(() -> new Exception("not exist account"));
+                .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
 
         // 쿠폰 코드와 사용자 정보가 매칭되는 쿠폰 보관함 정보 조회
         CouponInventory userCouponInventory = couponInventoryRepository.findMatchedCouponInventoryDetail(params.getAccountId(), params.getCouponCode())
-                .orElseThrow(() -> new Exception("fail to redeem cancel - not exist matched coupon"));
+                .orElseThrow(() -> CouponException.COUPON_NOT_EXIST);
 
         // 쿠폰 사용 취소 처리
         // 만약 쿠폰 기간이 만료된 경우 취소 불가 처리
@@ -178,7 +184,7 @@ public class CouponService {
 
             couponInventoryRepository.save(couponInventory);
         } else {
-            throw new Exception("fail to redeem cancel - coupon date expired.");
+            throw CouponException.COUPON_EXPIRED;
         }
     }
 
