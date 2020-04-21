@@ -1,6 +1,5 @@
 package com.kakaopay.preexam.controller.coupon;
 
-import com.google.gson.Gson;
 import com.kakaopay.preexam.model.coupon.CouponInventoryResult;
 import com.kakaopay.preexam.model.coupon.CouponParams;
 import com.kakaopay.preexam.model.response.Response;
@@ -17,8 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/coupon")
 public class CouponController {
-    protected final Gson gson = new Gson();
-
     @Autowired
     CouponService couponService;
 
