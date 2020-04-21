@@ -2,6 +2,8 @@ package com.kakaopay.preexam.model.coupon;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kakaopay.preexam.model.account.Account;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,10 +31,14 @@ import java.time.LocalDateTime;
                 resultClass = CouponInventoryResult.class)
 })
 @Data
+@Builder
+@AllArgsConstructor
 @Entity(name = "CouponInventory")
 @Table(name = "coupon_inventory")
 public class CouponInventory implements Serializable {
     private static final long serialVersionUID = 344358140916304245L;
+
+    protected CouponInventory() { }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

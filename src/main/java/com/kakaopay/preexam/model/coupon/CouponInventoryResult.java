@@ -1,6 +1,8 @@
 package com.kakaopay.preexam.model.coupon;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,9 +13,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
+@AllArgsConstructor
 @Entity
 public class CouponInventoryResult implements Serializable {
     private static final long serialVersionUID = 5112998889731887248L;
+
+    protected CouponInventoryResult() { }
 
     @EmbeddedId
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

@@ -1,5 +1,7 @@
 package com.kakaopay.preexam.model.coupon;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,10 +11,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
+@AllArgsConstructor
 @Entity(name = "Coupon")
 @Table(name = "coupons")
 public class Coupon implements Serializable {
     private static final long serialVersionUID = 899658754065197989L;
+
+    protected Coupon() { }
 
     // GenerationType.AUTO 설정시 테이블 기본 시퀀스를 기반 사용 되므로 IDENTITY 정의
     @Id

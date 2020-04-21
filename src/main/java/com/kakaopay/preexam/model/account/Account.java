@@ -1,6 +1,8 @@
 package com.kakaopay.preexam.model.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,10 +12,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
+@AllArgsConstructor
 @Entity(name = "Account")
 @Table(name = "accounts")
 public class Account implements Serializable {
     private static final long serialVersionUID = 3597051251082801705L;
+
+    protected Account() { }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
