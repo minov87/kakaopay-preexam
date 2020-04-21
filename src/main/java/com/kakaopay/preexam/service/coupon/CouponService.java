@@ -54,11 +54,12 @@ public class CouponService {
         LocalDateTime expireDate = nowDateTime.plus(Period.ofYears(1));
 
         for (int i = 0; i < count; i++) {
-            Coupon coupon = new Coupon();
-            coupon.setType("CREATE");
-            coupon.setIsvalid(0);
-            coupon.setExpireTime(expireDate);
-            coupon.setCouponCode(CouponUtil.generateCoupon());
+            Coupon coupon = Coupon.builder()
+                    .couponCode(CouponUtil.generateCoupon())
+                    .type("CREATE")
+                    .isvalid(0)
+                    .expireTime(expireDate)
+                    .build();
             em.persist(coupon);
 
             // 메모리 오류 방지 및 통신비용 감소를 위한 영속화
@@ -88,12 +89,12 @@ public class CouponService {
                 .orElseThrow(() -> new Exception("not enouth coupons"));
 
         // 지급할 미사용 쿠폰 정보를 지급 쿠폰함에 등록
-        CouponInventory couponInventory = new CouponInventory();
-        couponInventory.setAccount(account);
-        couponInventory.setCoupon(coupon);
-        couponInventory.setExpireTime(coupon.getExpireTime());
-        couponInventory.setStatus("NOT_USED");
-
+        CouponInventory couponInventory = CouponInventory.builder()
+                .account(account)
+                .coupon(coupon)
+                .status("NOT_USED")
+                .expireTime(coupon.getExpireTime())
+                .build();
         couponInventoryRepository.save(couponInventory);
 
         // 쿠폰 테이블의 사용 가능 여부 변경
@@ -101,10 +102,11 @@ public class CouponService {
         couponRepository.save(coupon);
 
         // 반환 데이터 정의
-        CouponInventoryResult couponInventoryResult = new CouponInventoryResult();
-        couponInventoryResult.setCouponCode(coupon.getCouponCode());
-        couponInventoryResult.setExpireTime(couponInventory.getExpireTime());
-        couponInventoryResult.setStatus(couponInventory.getStatus());
+        CouponInventoryResult couponInventoryResult = CouponInventoryResult.builder()
+                .couponCode(coupon.getCouponCode())
+                .status(couponInventory.getStatus())
+                .expireTime(couponInventory.getExpireTime())
+                .build();
 
         // 등록된 쿠폰 정보 반환
         return couponInventoryResult;
@@ -140,11 +142,16 @@ public class CouponService {
                 .orElseThrow(() -> new Exception("fail to redeem - not exist matched coupon"));
 
         // 쿠폰 사용 처리
-        CouponInventory couponInventory = userCouponInventory;
-        couponInventory.setUseTime(nowDateTime);
-        couponInventory.setStatus("USED");
+        // 만약 이미 사용 처리된 쿠폰인 경우 불가 처리
+        if(!userCouponInventory.getStatus().equals("USED")) {
+            CouponInventory couponInventory = userCouponInventory;
+            couponInventory.setUseTime(nowDateTime);
+            couponInventory.setStatus("USED");
 
-        couponInventoryRepository.save(couponInventory);
+            couponInventoryRepository.save(couponInventory);
+        } else {
+            throw new Exception("fail to redeem - already used.");
+        }
     }
 
     /**
