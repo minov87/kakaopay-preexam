@@ -167,7 +167,7 @@ public class CouponService {
 
         // 쿠폰 코드와 사용자 정보가 매칭되는 쿠폰 보관함 정보 조회
         CouponInventory userCouponInventory = couponInventoryRepository.findMatchedCouponInventoryDetail(params.getAccountId(), params.getCouponCode())
-                .orElseThrow(() -> new Exception("fail to redeem - not exist matched coupon"));
+                .orElseThrow(() -> new Exception("fail to redeem cancel - not exist matched coupon"));
 
         // 쿠폰 사용 취소 처리
         // 만약 쿠폰 기간이 만료된 경우 취소 불가 처리
