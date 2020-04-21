@@ -21,9 +21,9 @@ public class AccountController {
     AccountService accountService;
 
     /**
-     * 회원 가입
+     * 회원가입
      *
-     * @param param
+     * @param param 가입 계정명, 가입 비밀번호
      * @return
      */
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,8 +42,25 @@ public class AccountController {
         }
     }
 
-    // 회원 로그인
-    //public Response signIn() {
-    //
-    //}
+    /**
+     * 로그인
+     *
+     * @param param 로그인 계정명, 로그인 비밀번호
+     * @return
+     */
+    @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response signIn(
+            @RequestBody(required = true) AccountParams param) {
+        if(param.getName() == null || param.getPassword() == null) {
+            return Response.builder().code(HttpStatus.BAD_REQUEST.value()).msg("invalid parameter").build();
+        }
+
+        try {
+            Token token = accountService.signIn(param);
+            return Response.builder().code(HttpStatus.OK.value()).data(token).build();
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Response.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).msg(e.getMessage()).build();
+        }
+    }
 }

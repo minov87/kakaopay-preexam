@@ -38,10 +38,12 @@ public class AccountService {
      * @throws Exception
      */
     public Token signUp(AccountParams params) throws Exception {
+        // 기 가입된 사용자 인지 확인
         if(accountRepository.existsByName(params.getName())) {
-            throw new Exception("fail to signup - already signup.");
+            throw new Exception("fail to sign up - already exist");
         }
 
+        // 화원가입 진행
         Account account = Account.builder()
                 .name(params.getName())
                 .password(passwordEncoder.encode(params.getPassword()))
@@ -52,6 +54,26 @@ public class AccountService {
     }
 
     /**
+     * 로그인
+     *
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    public Token signIn(AccountParams params) throws Exception {
+        // 사용자 계정 확인
+        Account account = accountRepository.findFirstByName(params.getName())
+                .orElseThrow(() -> new Exception("fail to sign in - not exist"));
+
+        // 비밀번호 검증
+        if(passwordEncoder.matches(params.getPassword(), account.getPassword())) {
+            return getToken(account.getId());
+        } else {
+            throw new Exception("fail to sign in - wrong information");
+        }
+    }
+
+    /**
      * 발급된 토큰 정보 가져오기
 
      * @param accountId
@@ -59,7 +81,7 @@ public class AccountService {
      */
     private Token getToken(Long accountId) {
         Map<String, Object> bodyMap = new HashMap<>();
-        bodyMap.put("id", accountId);
+        bodyMap.put("accountId", accountId);
 
         return tokenService.createToken(bodyMap);
     }
