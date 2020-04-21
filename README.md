@@ -24,7 +24,7 @@
 - [ ] README.md 파일을 추가하여, 개발 프레임워크, 문제해결 전략, 빌드 및 실행 방법을 기술.
 
 ##### 제약사항 선택
-- [ ] JWT를 이용 Token 기반 API 인증 기능 개발 및 각 API 호출시 HTTP Header에 발급받은 토큰을 가지고 호출.
+- [x] [#9](https://github.com/minov87/kakaopay-preexam/issues/9) JWT를 이용 Token 기반 API 인증 기능 개발 및 각 API 호출시 HTTP Header에 발급받은 토큰을 가지고 호출.
   - [x] [#7](https://github.com/minov87/kakaopay-preexam/issues/7) signup 계정생성 API: ID, PW를 입력 받아 내부 DB에 계정을 저장하고 토큰을 생성하여 출력.
   - [x] [#8](https://github.com/minov87/kakaopay-preexam/issues/8) signin 로그인 API: 입력으로 생성된 계정 (ID, PW)으로 로그인 요청하면 토큰을 발급.
 - [ ] 100억개 이상 쿠폰 관리 저장 관리 가능 하도록 구현 
