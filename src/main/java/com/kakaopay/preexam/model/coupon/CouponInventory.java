@@ -17,7 +17,15 @@ import java.time.LocalDateTime;
                         "FROM coupon_inventory AS ci " +
                         "INNER JOIN coupons AS c ON ci.coupon_id = c.id " +
                         "WHERE ci.account_id = :accountId " +
-                        "ORDER BY ci.id DESC ",
+                        "ORDER BY ci.id DESC",
+                resultClass = CouponInventoryResult.class),
+        @NamedNativeQuery(
+                name = "CouponInventory.findExpiredCouponList",
+                query = "SELECT c.id, c.coupon_code, ci.status, ci.expire_time " +
+                        "FROM coupon_inventory AS ci " +
+                        "INNER JOIN coupons AS c ON ci.coupon_id = c.id " +
+                        "WHERE ci.expire_time BETWEEN :starTime AND :endTime " +
+                        "ORDER BY ci.id DESC",
                 resultClass = CouponInventoryResult.class)
 })
 @Data

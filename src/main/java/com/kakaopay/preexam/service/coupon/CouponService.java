@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class CouponService {
         couponInventory.setAccount(account);
         couponInventory.setCoupon(coupon);
         couponInventory.setExpireTime(coupon.getExpireTime());
-        couponInventory.setStatus("ACTIVE");
+        couponInventory.setStatus("NOT_USED");
 
         couponInventoryRepository.save(couponInventory);
 
@@ -120,9 +121,7 @@ public class CouponService {
         Account account = accountRepository.findById(params.getAccountId())
                 .orElseThrow(() -> new Exception("not exist account"));
 
-        List<CouponInventoryResult> couponInventoryResultList = couponInventoryRepository.findUserCouponList(params.getAccountId());
-
-        return couponInventoryResultList;
+        return couponInventoryRepository.findUserCouponList(params.getAccountId());
     }
 
     /**
@@ -168,11 +167,24 @@ public class CouponService {
         if(userCouponInventory.getStatus().equals("USED") && nowDateTime.isBefore(userCouponInventory.getExpireTime())){
             CouponInventory couponInventory = userCouponInventory;
             couponInventory.setUseTime(null);
-            couponInventory.setStatus("ACTIVE");
+            couponInventory.setStatus("NOT_USED");
 
             couponInventoryRepository.save(couponInventory);
         } else {
             throw new Exception("fail to redeem cancel - coupon date expired.");
         }
+    }
+
+    /**
+     * 발급된 쿠폰 중 당일 만료된 쿠폰 목록 조회
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<CouponInventoryResult> getExpiredCouponList() throws Exception {
+        LocalDateTime starTime = nowDateTime.with(LocalTime.MIN);
+
+        // 사용자에게 발급된 쿠폰 중 당일 만료
+        return couponInventoryRepository.findExpiredCouponList(starTime, nowDateTime);
     }
 }

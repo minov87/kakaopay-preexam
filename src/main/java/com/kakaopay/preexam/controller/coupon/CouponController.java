@@ -136,11 +136,20 @@ public class CouponController {
         }
     }
 
-    /*
-    // 당일 만료 쿠폰 목록 조회 API
-    @GetMapping("/expired/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    /**
+     * 발급된 쿠폰 중 당일 만료된 쿠폰 목록 조회 API
+     *
+     * @return
+     * @throws Exception
+     */
+    @GetMapping(value = "/expired/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response getExpiredCouponList() throws Exception {
-
+        try {
+            List<CouponInventoryResult> couponInventoryResultList = couponService.getExpiredCouponList();
+            return Response.builder().code(HttpStatus.OK.value()).data(couponInventoryResultList).build();
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Response.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).msg(e.getMessage()).build();
+        }
     }
-    */
 }
