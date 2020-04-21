@@ -5,12 +5,15 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
-@Entity
+@Entity(name = "Account")
 @Table(name = "accounts")
-public class Account {
+public class Account implements Serializable {
+    private static final long serialVersionUID = 3597051251082801705L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -27,6 +30,6 @@ public class Account {
 
     @CreationTimestamp
     @Column(name = "signup_time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date signupTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime signupTime;
 }

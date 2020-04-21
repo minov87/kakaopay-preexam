@@ -16,6 +16,7 @@ spring:
       connection-timeout: 30000
   jpa:
     generate-ddl: true
+    show-sql: true
   h2:
     console:
       enabled: true

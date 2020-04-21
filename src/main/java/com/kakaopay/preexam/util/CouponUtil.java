@@ -1,16 +1,14 @@
 package com.kakaopay.preexam.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Calendar;
+import java.time.Year;
 import java.util.Random;
 
 @Slf4j
 public final class CouponUtil {
     private static final Random rnd = new Random(System.currentTimeMillis());
-    private static final Calendar cal = Calendar.getInstance();
-    private static int year = cal.get(cal.YEAR);
+    private static int year = Year.now().getValue();
 
     /**
      * 쿠폰 생성시 사용될 Charset 유형 정의
