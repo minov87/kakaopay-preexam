@@ -81,6 +81,7 @@ public class CouponService {
         // 지급할 미사용 쿠폰 1개 조회
         LocalDateTime expireDate = LocalDateTime.now();
 
+        // 지급할 사용자 및 사용가능 쿠폰 정보 조회
         Account account = accountRepository.findById(params.getAccountId())
                 .orElseThrow(() -> new Exception("not exist account"));
         Coupon coupon = couponRepository.findTop1ByIsvalidEqualsAndExpireTimeGreaterThanEqualOrderByCreateTimeAsc(0, expireDate)
@@ -116,11 +117,37 @@ public class CouponService {
      * @return
      */
     public List<CouponInventoryResult> getGiveCouponList(CouponParams params) throws Exception {
+        // 지급할 사용자 조회
         Account account = accountRepository.findById(params.getAccountId())
                 .orElseThrow(() -> new Exception("not exist account"));
 
         List<CouponInventoryResult> couponInventoryResultList = couponInventoryRepository.findUserCouponList(params.getAccountId());
 
         return couponInventoryResultList;
+    }
+
+    /**
+     * 지급된 쿠폰 사용
+     *
+     * @param params
+     * @throws Exception
+     */
+    public void couponRedeem(CouponParams params) throws Exception {
+        LocalDateTime useDate = LocalDateTime.now();
+
+        // 지급할 사용자 조회
+        Account account = accountRepository.findById(params.getAccountId())
+                .orElseThrow(() -> new Exception("not exist account"));
+
+        // 쿠폰 코드와 사용자 정보가 매칭되는 쿠폰 보관함 정보 조회
+        CouponInventory userCouponInventory = couponInventoryRepository.findMatchedCouponInventoryDetail(params.getAccountId(), params.getCouponCode())
+                .orElseThrow(() -> new Exception("fail to redeem - not exist matched coupon"));
+
+        // 쿠폰 사용 처리
+        CouponInventory couponInventory = userCouponInventory;
+        couponInventory.setUseTime(useDate);
+        couponInventory.setStatus("USED");
+
+        couponInventoryRepository.save(couponInventory);
     }
 }

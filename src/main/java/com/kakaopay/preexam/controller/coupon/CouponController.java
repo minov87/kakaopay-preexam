@@ -41,7 +41,7 @@ public class CouponController {
             return Response.builder().code(HttpStatus.OK.value()).msg("success").build();
         } catch (Exception e) {
             log.error(e.toString());
-            return Response.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).msg(e.getMessage()).build();
+            return Response.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).msg("internal server error").build();
         }
     }
 
@@ -89,15 +89,31 @@ public class CouponController {
             return Response.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).msg(e.getMessage()).build();
         }
     }
-    /*
-    // 지급된 쿠폰 사용 API
-    @PostMapping("/redeem", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response couponRedeem(
-            @RequestParam(name = "accountId") Long accountId,
-            @RequestParam(name = "couponCode") String couponCode) throws Exception {
 
+    /**
+     * 지급된 쿠폰 사용 API
+     *
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/redeem", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response couponRedeem(
+            @RequestBody(required = true) CouponParams param) throws Exception {
+        if(param.getAccountId() == null || param.getCouponCode() == null) {
+            return Response.builder().code(HttpStatus.BAD_REQUEST.value()).msg("invalid parameter").build();
+        }
+
+        try {
+            couponService.couponRedeem(param);
+            return Response.builder().code(HttpStatus.OK.value()).msg("success").build();
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Response.builder().code(HttpStatus.INTERNAL_SERVER_ERROR.value()).msg(e.getMessage()).build();
+        }
     }
 
+    /*
     // 지급된 쿠폰 사용 취소 API
     @PostMapping("/redeem/cancel", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response couponRedeemCancel(

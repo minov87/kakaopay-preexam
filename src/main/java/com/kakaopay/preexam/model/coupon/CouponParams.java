@@ -10,4 +10,7 @@ public class CouponParams {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long accountId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String couponCode;
 }
