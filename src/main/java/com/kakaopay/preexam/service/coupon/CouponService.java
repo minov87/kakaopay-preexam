@@ -20,7 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -44,24 +44,26 @@ public class CouponService {
     private EntityManager em;
 
     private final LocalDateTime nowDateTime = LocalDateTime.now();
+    private LocalDateTime expireDateTime = LocalDateTime.now().with(LocalTime.MAX).plusYears(1);
 
     /**
      * 랜덤 쿠폰 N개 생성
      *
-     * @param count
+     * @param params
      * @throws Exception
      */
     @Transactional
-    public void makeCoupon(int count) throws Exception {
+    public void makeCoupon(CouponParams params) throws Exception {
+        int count = params.getCount();
         try {
-            LocalDateTime expireDate = nowDateTime.plus(Period.ofYears(1));
+            if(params.getExpireTime() != null) expireDateTime = LocalDateTime.parse(params.getExpireTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
             for (int i = 0; i < count; i++) {
                 Coupon coupon = Coupon.builder()
                         .couponCode(CouponUtil.generateCoupon())
                         .type("CREATE")
                         .isvalid(0)
-                        .expireTime(expireDate)
+                        .expireTime(expireDateTime)
                         .build();
                 em.persist(coupon);
 
