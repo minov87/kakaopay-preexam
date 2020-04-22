@@ -34,7 +34,7 @@ public class CouponController {
             throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
         }
 
-        couponService.makeCoupon(param.getCount());
+        couponService.makeCoupon(param);
         return Response.builder().code(RESPONSE_STATUS.SUCCESS.getCode()).msg(RESPONSE_STATUS.SUCCESS.getMessage()).build();
     }
 
