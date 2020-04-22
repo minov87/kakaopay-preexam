@@ -1,5 +1,6 @@
 package com.kakaopay.preexam.exception;
 
+import com.kakaopay.preexam.model.response.RESPONSE_STATUS;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,6 +14,11 @@ public class BaseException extends Exception {
     public BaseException(String message, int errorCode) {
         super(message);
         this.errorCode = errorCode;
+    }
+
+    public BaseException(RESPONSE_STATUS responseStatus) {
+        super(responseStatus.getMessage());
+        this.errorCode = responseStatus.getCode();
     }
 
     @Override

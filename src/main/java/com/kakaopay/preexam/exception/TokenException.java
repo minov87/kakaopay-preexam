@@ -23,7 +23,7 @@ public class TokenException extends BaseException {
     );
     public static final TokenException TOKEN_EXPIRED = new TokenException(
             RESPONSE_STATUS.TOKEN_EXPIRED.getCode(),
-            RESPONSE_STATUS.TOKEN_VERIFY_FAIL.getMessage()
+            RESPONSE_STATUS.TOKEN_EXPIRED.getMessage()
     );
     public static final TokenException TOKEN_EMPTY = new TokenException(
             RESPONSE_STATUS.TOKEN_EMPTY.getCode(),
