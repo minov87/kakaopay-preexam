@@ -1,12 +1,10 @@
 package com.kakaopay.preexam.service.token;
 
 import com.kakaopay.preexam.exception.TokenException;
-import com.kakaopay.preexam.model.response.RESPONSE_STATUS;
 import com.kakaopay.preexam.model.token.Token;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Date;
 import java.util.Map;
@@ -63,10 +61,12 @@ public class TokenService {
                     .setSigningKey(key.getBytes())
                     .parseClaimsJws(token);
             return true;
+        } catch (NullPointerException | IllegalArgumentException e) {
+            throw TokenException.TOKEN_EMPTY;
         } catch (ExpiredJwtException e) {
-            throw new TokenException(RESPONSE_STATUS.TOKEN_EXPIRED);
+            throw TokenException.TOKEN_EXPIRED;
         } catch (Exception e) {
-            throw new TokenException(RESPONSE_STATUS.TOKEN_VERIFY_FAIL);
+            throw TokenException.TOKEN_VERIFY_FAIL;
         }
     }
 }
