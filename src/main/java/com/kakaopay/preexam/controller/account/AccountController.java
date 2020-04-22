@@ -1,8 +1,8 @@
 package com.kakaopay.preexam.controller.account;
 
 import com.kakaopay.preexam.anotation.NoneAuth;
+import com.kakaopay.preexam.dto.account.AccountDto;
 import com.kakaopay.preexam.exception.BaseException;
-import com.kakaopay.preexam.model.account.AccountParams;
 import com.kakaopay.preexam.model.response.RESPONSE_STATUS;
 import com.kakaopay.preexam.model.response.Response;
 import com.kakaopay.preexam.model.token.Token;
@@ -31,7 +31,7 @@ public class AccountController {
     @NoneAuth
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response signUp(
-            @RequestBody(required = true) AccountParams param) throws Exception {
+            @RequestBody(required = true) AccountDto param) throws Exception {
         if(param.getName() == null || param.getPassword() == null) {
             throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
         }
@@ -49,7 +49,7 @@ public class AccountController {
     @NoneAuth
     @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response signIn(
-            @RequestBody(required = true) AccountParams param) throws Exception {
+            @RequestBody(required = true) AccountDto param) throws Exception {
         if(param.getName() == null || param.getPassword() == null) {
             throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
         }
