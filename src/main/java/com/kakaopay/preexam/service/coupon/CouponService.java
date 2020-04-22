@@ -1,12 +1,14 @@
 package com.kakaopay.preexam.service.coupon;
 
 import com.kakaopay.preexam.exception.AccountException;
+import com.kakaopay.preexam.exception.BaseException;
 import com.kakaopay.preexam.exception.CouponException;
 import com.kakaopay.preexam.model.account.Account;
 import com.kakaopay.preexam.model.coupon.Coupon;
 import com.kakaopay.preexam.model.coupon.CouponInventory;
 import com.kakaopay.preexam.model.coupon.CouponInventoryResult;
 import com.kakaopay.preexam.model.coupon.CouponParams;
+import com.kakaopay.preexam.model.response.RESPONSE_STATUS;
 import com.kakaopay.preexam.repository.account.AccountRepository;
 import com.kakaopay.preexam.repository.coupon.CouponInventoryRepository;
 import com.kakaopay.preexam.repository.coupon.CouponRepository;
@@ -21,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -40,8 +43,8 @@ public class CouponService {
         this.accountRepository = accountRepository;
     }
 
-    @PersistenceContext
-    private EntityManager em;
+    //@PersistenceContext
+    //private EntityManager em;
 
     private final LocalDateTime nowDateTime = LocalDateTime.now();
     private LocalDateTime expireDateTime = LocalDateTime.now().with(LocalTime.MAX).plusYears(1);
@@ -55,9 +58,14 @@ public class CouponService {
     @Transactional
     public void makeCoupon(CouponParams params) throws Exception {
         int count = params.getCount();
+        if(count < 1){
+            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST);
+        }
+
         try {
             if(params.getExpireTime() != null) expireDateTime = LocalDateTime.parse(params.getExpireTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
+            List<Coupon> couponList = new ArrayList<>();
             for (int i = 0; i < count; i++) {
                 Coupon coupon = Coupon.builder()
                         .couponCode(CouponUtil.generateCoupon())
@@ -65,17 +73,20 @@ public class CouponService {
                         .isvalid(0)
                         .expireTime(expireDateTime)
                         .build();
-                em.persist(coupon);
+                couponList.add(coupon);
 
-                // 메모리 오류 방지 및 통신비용 감소를 위한 영속화
-                if (i % 500 == 0) {
-                    em.flush();
-                    em.clear();
-                }
+                // 메모리 오류 방지 및 통신비용 감소를 위한 영속화 - unit test 문제로 기본 방식 사용.
+                //em.persist(coupon);
+                //if (i % 500 == 0) {
+                //    em.flush();
+                //    em.clear();
+                //}
             }
 
-            em.flush();
-            em.clear();
+            couponRepository.saveAll(couponList);
+
+            //em.flush();
+            //em.clear();
         } catch (Exception e) {
             throw CouponException.COUPON_MAKE_FAIL;
         }
