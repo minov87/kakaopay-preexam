@@ -18,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +45,8 @@ public class CouponService {
     //@PersistenceContext
     //private EntityManager em;
 
-    private final LocalDateTime nowDateTime = LocalDateTime.now();
+    private LocalDateTime nowDateTime = LocalDateTime.now();
+    private LocalDateTime nowDateTimeMod = LocalDate.now().atTime(LocalTime.now().plusHours(1).getHour(), (LocalDateTime.now().getMinute() / 10) * 10);
     private LocalDateTime expireDateTime = LocalDateTime.now().with(LocalTime.MAX).plusYears(1);
 
     /**
@@ -104,7 +104,7 @@ public class CouponService {
         // 지급할 사용자 및 지급할 미사용 쿠폰 1개 조회
         Account account = accountRepository.findById(params.getAccountId())
                 .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
-        Coupon coupon = couponRepository.findTop1ByIsvalidEqualsAndExpireTimeGreaterThanEqualOrderByCreateTimeAsc(0, nowDateTime)
+        Coupon coupon = couponRepository.findTop1ByIsvalidEqualsAndExpireTimeGreaterThanEqualOrderByCreateTimeAsc(0, nowDateTimeMod)
                 .orElseThrow(() -> CouponException.COUPON_NOT_ENOUGH);
 
         // 지급할 미사용 쿠폰 정보를 지급 쿠폰함에 등록
@@ -151,6 +151,7 @@ public class CouponService {
      * @param params
      * @throws Exception
      */
+    @Transactional
     public void couponRedeem(CouponParams params) throws Exception {
         // 지급할 사용자 조회
         Account account = accountRepository.findById(params.getAccountId())
@@ -179,6 +180,7 @@ public class CouponService {
      * @param params
      * @throws Exception
      */
+    @Transactional
     public void couponRedeemCancel(CouponParams params) throws Exception {
         // 지급할 사용자 조회
         Account account = accountRepository.findById(params.getAccountId())
@@ -210,7 +212,7 @@ public class CouponService {
     public List<CouponInventoryResult> getExpiredCouponList() throws Exception {
         LocalDateTime starTime = nowDateTime.with(LocalTime.MIN);
 
-        // 사용자에게 발급된 쿠폰 중 당일 만료
-        return couponInventoryRepository.findExpiredCouponList(starTime, nowDateTime);
+        // 사용자에게 발급된 쿠폰 중 당일 만료 쿠폰 조회
+        return couponInventoryRepository.findExpiredCouponList(starTime, nowDateTimeMod);
     }
 }
