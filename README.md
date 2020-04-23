@@ -72,3 +72,6 @@
 - [DB ERD](https://www.erdcloud.com/d/o5MEyDk9nRgfZYNSN)
 
 ### 빌드 및 실행방법
+- 하단 빌드 실행 전 gradle 이 설치되어 있어야 한다.
+  - 설치 방법은 [gradle 공식사이트](https://gradle.org/install/) 를 통해서 확인한다.
+- `gradle build && java -jar build/libs/kakaopay_preexam-0.0.1.jsr`
