@@ -1,14 +1,13 @@
 package com.kakaopay.preexam.model.coupon;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,10 +20,7 @@ public class CouponInventoryResult implements Serializable {
 
     protected CouponInventoryResult() { }
 
-    @EmbeddedId
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private CouponInventoryPK PK;
-
+    @Id
     @Column(name = "coupon_code")
     private String couponCode;
 
