@@ -47,7 +47,7 @@ public class AccountServiceTest {
 
     @Test
     @DisplayName("회원가입 테스트")
-    public void signUpTest() throws Exception {
+    public void testSignUp() throws Exception {
         token = accountService.signUp(accountDto);
         verify(accountRepository, atLeastOnce()).save(any());
         assertNotNull(token.getAccessToken());

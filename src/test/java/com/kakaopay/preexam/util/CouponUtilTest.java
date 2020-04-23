@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CouponUtilTest {
     @Test
     @DisplayName("쿠폰 생성 테스트")
-    public void generateCouponTest() {
+    public void testGenerateCoupon() {
         // 생성된 쿠폰 길이 체크
         String couponStr = CouponUtil.generateCoupon();
         assertEquals(19, couponStr.length());

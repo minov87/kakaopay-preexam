@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +31,7 @@ public class TokenServiceTest {
 
     @Test
     @DisplayName("토큰 생성 테스트")
-    public void createTokenTest() {
+    public void testCreateToken() {
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("testId", 1);
         Token token = tokenService.createToken(testMap);
@@ -49,7 +48,7 @@ public class TokenServiceTest {
 
     @Test
     @DisplayName("토큰 검증 테스트")
-    public void verifyTokenTest() throws Exception {
+    public void testVerifyToken() throws Exception {
         // 토큰 값이 Null 일 경우 에러 확인
         tokenException = assertThrows(TokenException.class, () ->
                 tokenService.verifyToken(null));
