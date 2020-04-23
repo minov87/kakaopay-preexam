@@ -7,26 +7,23 @@ import org.hamcrest.collection.IsMapContaining;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("토큰 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
 public class TokenServiceTest {
-    static final String expiredToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4NzUxODcwNX0.zWPiAzm1sJB5g8OnjCmVxJTxpgb6i3fNeg7zaeH5Ytk"; // 만료일 4/22
-    static final String useAbleToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4ODkwMDUwNX0.04AcNFUDigCDcMAF-X_Zps501fhrz2tpXB-NqHNOHfI"; // 만료일 5/8
+    private static final String expiredToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4NzUxODcwNX0.zWPiAzm1sJB5g8OnjCmVxJTxpgb6i3fNeg7zaeH5Ytk"; // 만료일 4/22
+    private static final String useAbleToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4ODkwMDUwNX0.04AcNFUDigCDcMAF-X_Zps501fhrz2tpXB-NqHNOHfI"; // 만료일 5/8
 
-    @MockBean
     @InjectMocks
     TokenService tokenService;
 
@@ -34,7 +31,7 @@ public class TokenServiceTest {
     TokenException tokenException;
 
     @Test
-    @DisplayName("Create Token Test")
+    @DisplayName("토큰 생성 테스트")
     public void createTokenTest() {
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("testId", 1);
@@ -48,11 +45,10 @@ public class TokenServiceTest {
         assertNotNull(token.getAccessToken());
         assertNotNull(token.getRefreshToken());
         assertThat(resultMap, IsMapContaining.hasKey("accessToken"));
-        assertThat(resultMap, IsMapContaining.hasKey("refreshToken"));
     }
 
     @Test
-    @DisplayName("Verify Token Test")
+    @DisplayName("토큰 검증 테스트")
     public void verifyTokenTest() throws Exception {
         // 토큰 값이 Null 일 경우 에러 확인
         tokenException = assertThrows(TokenException.class, () ->
@@ -70,9 +66,8 @@ public class TokenServiceTest {
         tokenException = assertThrows(TokenException.class, () ->
                 tokenService.verifyToken(useAbleToken.concat("__Modify")));
         assertEquals("Token verify fail", tokenException.getMessage());
-        assertEquals(206, tokenException.getErrorCode());
+        assertEquals(206, tokenException.getErrorCode(), "");
 
-        // 정상 토큰 검증
         assertTrue(tokenService.verifyToken(useAbleToken));
     }
 }
