@@ -31,7 +31,7 @@ public class CouponController {
     public Response makeCoupon(
             @RequestBody(required = true) CouponParams param) throws Exception {
         if(param.getCount() < 1) {
-            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
+            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST);
         }
 
         couponService.makeCoupon(param);
@@ -49,7 +49,7 @@ public class CouponController {
     public Response couponGive(
             @RequestBody(required = true) CouponParams param) throws Exception {
         if(param.getAccountId() == null) {
-            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
+            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST);
         }
 
         CouponInventoryResult result = couponService.couponGive(param);
@@ -67,7 +67,7 @@ public class CouponController {
     public Response getGiveCouponList(
             @RequestBody(required = true) CouponParams param) throws Exception {
         if(param.getAccountId() == null) {
-            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
+            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST);
         }
 
         List<CouponInventoryResult> result = couponService.getGiveCouponList(param);
@@ -85,7 +85,7 @@ public class CouponController {
     public Response couponRedeem(
             @RequestBody(required = true) CouponParams param) throws Exception {
         if(param.getAccountId() == null || param.getCouponCode() == null) {
-            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
+            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST);
         }
 
         couponService.couponRedeem(param);
@@ -103,7 +103,7 @@ public class CouponController {
     public Response couponRedeemCancel(
             @RequestBody(required = true) CouponParams param) throws Exception {
         if (param.getAccountId() == null || param.getCouponCode() == null) {
-            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST.getMessage(), RESPONSE_STATUS.BAD_REQUEST.getCode());
+            throw new BaseException(RESPONSE_STATUS.BAD_REQUEST);
         }
 
         couponService.couponRedeemCancel(param);
