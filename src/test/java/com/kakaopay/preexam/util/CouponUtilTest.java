@@ -1,7 +1,7 @@
 package com.kakaopay.preexam.util;
 
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.time.Year;
 import java.util.regex.Matcher;
@@ -10,9 +10,10 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@DisplayName("쿠폰 유틸리티 테스트")
 public class CouponUtilTest {
     @Test
-    @DisplayName("Generate Coupon Test")
+    @DisplayName("쿠폰 생성 테스트")
     public void generateCouponTest() {
         // 생성된 쿠폰 길이 체크
         String couponStr = CouponUtil.generateCoupon();
