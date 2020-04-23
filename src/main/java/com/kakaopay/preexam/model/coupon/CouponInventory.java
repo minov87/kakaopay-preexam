@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
                 resultClass = CouponInventoryResult.class),
         @NamedNativeQuery(
                 name = "CouponInventory.findExpiredCouponList",
-                query = "SELECT c.id, c.coupon_code, ci.status, ci.expire_time " +
+                query = "SELECT c.coupon_code, ci.status, ci.expire_time " +
                         "FROM coupon_inventory AS ci " +
                         "INNER JOIN coupons AS c ON ci.coupon_id = c.id " +
                         "WHERE ci.expire_time BETWEEN :starTime AND :endTime " +

@@ -20,13 +20,12 @@ public class Coupon implements Serializable {
 
     protected Coupon() { }
 
-    // GenerationType.AUTO 설정시 테이블 기본 시퀀스를 기반 사용 되므로 IDENTITY 정의
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "coupon_code", nullable = false)
+    @Column(name = "coupon_code", unique = true, nullable = false)
     private String couponCode;
 
     @Column(name = "type")
