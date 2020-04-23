@@ -158,13 +158,12 @@ public class CouponService {
                 .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
 
         // 쿠폰 코드와 사용자 정보가 매칭되는 쿠폰 보관함 정보 조회
-        CouponInventory userCouponInventory = couponInventoryRepository.findMatchedCouponInventoryDetail(params.getAccountId(), params.getCouponCode())
+        CouponInventory couponInventory = couponInventoryRepository.findMatchedCouponInventoryDetail(params.getAccountId(), params.getCouponCode())
                 .orElseThrow(() -> CouponException.COUPON_NOT_EXIST);
 
         // 쿠폰 사용 처리
         // 만약 이미 사용 처리된 쿠폰인 경우 불가 처리
-        if(!userCouponInventory.getStatus().equals("USED")) {
-            CouponInventory couponInventory = userCouponInventory;
+        if(!couponInventory.getStatus().equals("USED")) {
             couponInventory.setUseTime(nowDateTime);
             couponInventory.setStatus("USED");
 
