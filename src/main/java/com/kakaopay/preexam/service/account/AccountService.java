@@ -82,7 +82,7 @@ public class AccountService {
      */
     private Token getToken(Long id) {
         Map<String, Object> bodyMap = new HashMap<>();
-        bodyMap.put("accountName", id);
+        bodyMap.put("accountId", id);
 
         return tokenService.createToken(bodyMap);
     }
