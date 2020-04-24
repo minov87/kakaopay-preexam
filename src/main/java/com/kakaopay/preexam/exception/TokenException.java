@@ -21,6 +21,10 @@ public class TokenException extends BaseException {
             RESPONSE_STATUS.TOKEN_VERIFY_FAIL.getCode(),
             RESPONSE_STATUS.TOKEN_VERIFY_FAIL.getMessage()
     );
+    public static final TokenException TOKEN_VERIFY_FAIL_ACCOUNT_NOT_EXIST = new TokenException(
+            RESPONSE_STATUS.TOKEN_VERIFY_FAIL_ACCOUNT_NOT_EXIST.getCode(),
+            RESPONSE_STATUS.TOKEN_VERIFY_FAIL_ACCOUNT_NOT_EXIST.getMessage()
+    );
     public static final TokenException TOKEN_EXPIRED = new TokenException(
             RESPONSE_STATUS.TOKEN_EXPIRED.getCode(),
             RESPONSE_STATUS.TOKEN_EXPIRED.getMessage()
