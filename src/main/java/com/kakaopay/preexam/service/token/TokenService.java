@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -55,12 +56,17 @@ public class TokenService {
      * @return
      * @throws Exception
      */
-    public boolean verifyToken(String token) throws Exception {
+    public HashMap<String, Object> verifyToken(String token) throws Exception {
         try {
             Jws<Claims> jws = Jwts.parser()
                     .setSigningKey(key.getBytes())
                     .parseClaimsJws(token);
-            return true;
+
+            HashMap<String, Object> returnMap = new HashMap<>();
+            returnMap.put("result", true);
+            returnMap.put("accountId", jws.getBody().get("accountId"));
+
+            return returnMap;
         } catch (NullPointerException | IllegalArgumentException e) {
             throw TokenException.TOKEN_EMPTY;
         } catch (ExpiredJwtException e) {
