@@ -97,7 +97,7 @@ public class CouponServiceTest {
         CouponParams couponParams = new CouponParams();
 
         // 쿠폰이 정상 생성되었을 경우 에러 없음 확인
-        couponParams.setCount(10);
+        couponParams.setCount(1000);
         assertDoesNotThrow(() ->
                 couponService.makeCoupon(couponParams));
 
