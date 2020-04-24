@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.atLeastOnce;
 
 @DisplayName("쿠폰 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -98,6 +100,8 @@ public class CouponServiceTest {
         couponParams.setCount(10);
         assertDoesNotThrow(() ->
                 couponService.makeCoupon(couponParams));
+
+        verify(couponRepository, atMostOnce()).save(any());
     }
 
     @Test
@@ -137,6 +141,8 @@ public class CouponServiceTest {
         // 쿠폰 지급 결과 에러 없음 확인
         assertDoesNotThrow(() ->
                 couponService.couponGive(couponParams));
+
+        verify(couponInventoryRepository, atLeastOnce()).save(any());
     }
 
     @Test

@@ -48,8 +48,17 @@ public class AccountServiceTest {
     @Test
     @DisplayName("회원가입 테스트")
     public void testSignUp() throws Exception {
+        Account account = Account.builder()
+                .id(1L)
+                .name(accountDto.getName())
+                .password(passwordEncoder.encode(accountDto.getPassword()))
+                .status(0)
+                .build();
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
+
         token = accountService.signUp(accountDto);
         verify(accountRepository, atLeastOnce()).save(any());
+
         assertNotNull(token.getAccessToken());
         assertNotNull(token.getRefreshToken());
     }
