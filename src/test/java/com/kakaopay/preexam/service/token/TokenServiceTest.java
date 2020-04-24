@@ -68,5 +68,6 @@ public class TokenServiceTest {
         assertEquals(206, tokenException.getErrorCode(), "");
 
         assertTrue((Boolean) tokenService.verifyToken(useAbleToken).get("result"));
+        assertEquals(1L, Long.parseLong(tokenService.verifyToken(useAbleToken).get("accountId").toString()));
     }
 }
