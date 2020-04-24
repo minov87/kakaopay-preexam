@@ -50,7 +50,8 @@
     > - Token 이 존재하지 않을 경우 에러를 반환한다.
     > - Token 정보에 문제가 있을 경우 에러를 반환한다.
     > - ※ 단, 아래의 회원가입 및 로그인 API의 경 Token 인증에서 제외한다. (토큰을 받아야 하기 때문에)
-    > - (공통) JWT 토큰의 만료시간은 `accessToken` 의 경우 10분, `refreshToken` 의 경우 60분 으로 정한다.                                                                                                                                          
+    > - (공통) JWT 토큰의 만료시간은 `accessToken` 의 경우 10분, `refreshToken` 의 경우 60분 으로 정한다.
+    > - 토큰 검증 이후 body 에 담긴 accountId 정보를 확인 후 실제 존재하는 사용자 인지 검증한다.                                                                                                                                     >                                                                                                                                       
   - [x] [#7](https://github.com/minov87/kakaopay-preexam/issues/7) signup 계정생성 API: ID, PW를 입력 받아 내부 DB에 계정을 저장하고 토큰을 생성하여 출력.
     > - 이미 가입된 정보일 경우 에러를 반환한다.
     > - 회원 가입이 완료되면 해당 사용자의 JWT 토큰 (accessToken, refreshToken) 을 반환한다.
