@@ -71,7 +71,7 @@ public class AccountServiceTest {
         accountException = assertThrows(AccountException.class, () ->
                 accountService.signUp(accountDto));
         assertEquals("Account already exist", accountException.getMessage());
-        assertEquals(209, accountException.getErrorCode());
+        assertEquals(210, accountException.getErrorCode());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class AccountServiceTest {
         accountException = assertThrows(AccountException.class, () ->
                 accountService.signIn(accountDto));
         assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(210, accountException.getErrorCode());
+        assertEquals(211, accountException.getErrorCode());
     }
 
     @Test
@@ -110,6 +110,6 @@ public class AccountServiceTest {
         accountException = assertThrows(AccountException.class, () ->
                 accountService.signIn(accountDto));
         assertEquals("Account password is wrong", accountException.getMessage());
-        assertEquals(211, accountException.getErrorCode());
+        assertEquals(212, accountException.getErrorCode());
     }
 }

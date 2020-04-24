@@ -155,7 +155,7 @@ public class CouponServiceTest {
         accountException = assertThrows(AccountException.class, () ->
                 couponService.couponGive(couponParams));
         assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(210, accountException.getErrorCode());
+        assertEquals(211, accountException.getErrorCode());
     }
 
     @Test
@@ -171,7 +171,7 @@ public class CouponServiceTest {
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponGive(couponParams));
         assertEquals("Coupon not enough", couponException.getMessage());
-        assertEquals(213, couponException.getErrorCode());
+        assertEquals(214, couponException.getErrorCode());
     }
 
     @Test
@@ -208,7 +208,7 @@ public class CouponServiceTest {
         accountException = assertThrows(AccountException.class, () ->
                 couponService.getGiveCouponList(couponParams));
         assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(210, accountException.getErrorCode());
+        assertEquals(211, accountException.getErrorCode());
     }
 
     @Test
@@ -241,7 +241,7 @@ public class CouponServiceTest {
         accountException = assertThrows(AccountException.class, () ->
                 couponService.couponRedeem(couponParams));
         assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(210, accountException.getErrorCode());
+        assertEquals(211, accountException.getErrorCode());
     }
 
     @Test
@@ -258,7 +258,7 @@ public class CouponServiceTest {
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeem(couponParams));
         assertEquals("Coupon not exist", couponException.getMessage());
-        assertEquals(214, couponException.getErrorCode());
+        assertEquals(215, couponException.getErrorCode());
     }
 
     @Test
@@ -285,7 +285,7 @@ public class CouponServiceTest {
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeem(couponParams));
         assertEquals("Coupon already used", couponException.getMessage());
-        assertEquals(215, couponException.getErrorCode());
+        assertEquals(216, couponException.getErrorCode());
     }
 
     @Test
@@ -324,7 +324,7 @@ public class CouponServiceTest {
         accountException = assertThrows(AccountException.class, () ->
                 couponService.couponRedeemCancel(couponParams));
         assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(210, accountException.getErrorCode());
+        assertEquals(211, accountException.getErrorCode());
     }
 
     @Test
@@ -341,7 +341,7 @@ public class CouponServiceTest {
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeemCancel(couponParams));
         assertEquals("Coupon not exist", couponException.getMessage());
-        assertEquals(214, couponException.getErrorCode());
+        assertEquals(215, couponException.getErrorCode());
     }
 
     @Test
@@ -368,7 +368,7 @@ public class CouponServiceTest {
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeemCancel(couponParams));
         assertEquals("Coupon expired", couponException.getMessage());
-        assertEquals(216, couponException.getErrorCode());
+        assertEquals(217, couponException.getErrorCode());
     }
 
     @Test

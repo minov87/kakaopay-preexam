@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("토큰 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 public class TokenServiceTest {
-    private static final String expiredToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4NzUxODcwNX0.zWPiAzm1sJB5g8OnjCmVxJTxpgb6i3fNeg7zaeH5Ytk"; // 만료일 4/22
-    private static final String useAbleToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4ODkwMDUwNX0.04AcNFUDigCDcMAF-X_Zps501fhrz2tpXB-NqHNOHfI"; // 만료일 5/8
+    private static final String expiredToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4NzcyMTE1MX0.iXMUTmQ2bxYonxNQfeQLcKsOlcz4qdpi9R3ciGSG74Q"; // 만료일 4/24
+    private static final String useAbleToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50SWQiOjEsImV4cCI6MTU4OTUzNTQyMH0.8qLF2cmcQMZbVTvspKNNQNIitcRQ-hqYoRvfJOhWb3Y"; // 만료일 5/15
 
     @InjectMocks
     TokenService tokenService;
@@ -53,13 +53,13 @@ public class TokenServiceTest {
         tokenException = assertThrows(TokenException.class, () ->
                 tokenService.verifyToken(null));
         assertEquals("Token Empty", tokenException.getMessage());
-        assertEquals(208, tokenException.getErrorCode());
+        assertEquals(209, tokenException.getErrorCode());
 
         // 만료 토큰 검증 및 토큰 에러 확인
         tokenException = assertThrows(TokenException.class, () ->
                 tokenService.verifyToken(expiredToken));
         assertEquals("Token expired", tokenException.getMessage());
-        assertEquals(207, tokenException.getErrorCode());
+        assertEquals(208, tokenException.getErrorCode());
 
         // 데이터 변조 토큰 검증 및 토큰 에러 확인
         tokenException = assertThrows(TokenException.class, () ->
@@ -67,6 +67,6 @@ public class TokenServiceTest {
         assertEquals("Token verify fail", tokenException.getMessage());
         assertEquals(206, tokenException.getErrorCode(), "");
 
-        assertTrue(tokenService.verifyToken(useAbleToken));
+        assertTrue((Boolean) tokenService.verifyToken(useAbleToken).get("result"));
     }
 }
