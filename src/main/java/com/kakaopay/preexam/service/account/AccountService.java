@@ -50,9 +50,8 @@ public class AccountService {
                 .name(params.getName())
                 .password(passwordEncoder.encode(params.getPassword()))
                 .build();
-        accountRepository.save(account);
 
-        return getToken(account.getName());
+        return getToken(accountRepository.save(account).getId());
     }
 
     /**
@@ -69,7 +68,7 @@ public class AccountService {
 
         // 비밀번호 검증
         if(passwordEncoder.matches(params.getPassword(), account.getPassword())) {
-            return getToken(account.getName());
+            return getToken(account.getId());
         } else {
             throw AccountException.ACCOUNT_WRONG_PASSWORD;
         }
@@ -78,12 +77,12 @@ public class AccountService {
     /**
      * 발급된 토큰 정보 가져오기
 
-     * @param name
+     * @param id
      * @return
      */
-    private Token getToken(String name) {
+    private Token getToken(Long id) {
         Map<String, Object> bodyMap = new HashMap<>();
-        bodyMap.put("accountName", name);
+        bodyMap.put("accountName", id);
 
         return tokenService.createToken(bodyMap);
     }
