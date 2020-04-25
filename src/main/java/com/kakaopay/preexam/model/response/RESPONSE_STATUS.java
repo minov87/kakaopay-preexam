@@ -28,7 +28,8 @@ public enum RESPONSE_STATUS {
     COUPON_NOT_ENOUGH(214, "Coupon not enough"),
     COUPON_NOT_EXIST(215, "Coupon not exist"),
     COUPON_ALREADY_USED(216, "Coupon already used"),
-    COUPON_EXPIRED(217, "Coupon expired");
+    COUPON_EXPIRED(217, "Coupon expired"),
+    COUPON_MAKE_COUNT_OVER(218, "Coupons creation count has been exceeded.");
 
     private int code;
     private String message;

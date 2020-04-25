@@ -37,4 +37,8 @@ public class CouponException extends BaseException {
             RESPONSE_STATUS.COUPON_EXPIRED.getCode(),
             RESPONSE_STATUS.COUPON_EXPIRED.getMessage()
     );
+    public static final CouponException COUPON_MAKE_COUNT_OVER = new CouponException(
+            RESPONSE_STATUS.COUPON_MAKE_COUNT_OVER.getCode(),
+            RESPONSE_STATUS.COUPON_MAKE_COUNT_OVER.getMessage()
+    );
 }

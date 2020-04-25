@@ -15,6 +15,7 @@ import com.kakaopay.preexam.repository.coupon.CouponRepository;
 import com.kakaopay.preexam.util.CouponUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,8 @@ public class CouponService {
         this.accountRepository = accountRepository;
     }
 
+    private final int couponLimitCount = 100000;
+
     //@PersistenceContext
     //private EntityManager em;
 
@@ -62,6 +65,11 @@ public class CouponService {
             throw new BaseException(RESPONSE_STATUS.BAD_REQUEST);
         }
 
+        // 1회 요청시 100만건 이상 요청하지 못하도록 제한
+        if(count > couponLimitCount) {
+            throw CouponException.COUPON_MAKE_COUNT_OVER;
+        }
+
         try {
             if(params.getExpireTime() != null) expireDateTime = LocalDateTime.parse(params.getExpireTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
@@ -77,7 +85,7 @@ public class CouponService {
 
                 // 메모리 오류 방지 및 통신비용 감소를 위한 영속화 - unit test 문제로 기본 방식 사용.
                 //em.persist(coupon);
-                if (i % 500 == 0) {
+                if (i % 1000 == 0) {
                 //    em.flush();
                 //    em.clear();
                     couponRepository.saveAll(couponList);
