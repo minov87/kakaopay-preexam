@@ -38,7 +38,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                 String token = bearerToken[0].equalsIgnoreCase("Bearer") ? bearerToken[1] : null;
                 HashMap<String, Object> verifyTokenResultMap = tokenService.verifyToken(token);
 
-                // 토큰 유무 토큰 검증 결과 유무 체크
+                // 토큰 유무 및 토큰 검증 결과 유무 체크
                 if (token != null && !verifyTokenResultMap.isEmpty()
                         && verifyTokenResultMap.get("result") != null
                         && verifyTokenResultMap.get("accountId") != null
