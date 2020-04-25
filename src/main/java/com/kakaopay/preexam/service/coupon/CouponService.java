@@ -173,7 +173,12 @@ public class CouponService {
 
         // 쿠폰 사용 처리
         // 만약 이미 사용 처리된 쿠폰인 경우 불가 처리
+        // 만약 쿠폰 기간이 만료된 경우 취소 불가 처리
         if(!couponInventory.getStatus().equals("USED")) {
+            if(!nowDateTime.isBefore(couponInventory.getExpireTime())) {
+                throw CouponException.COUPON_EXPIRED;
+            }
+
             couponInventory.setUseTime(nowDateTime);
             couponInventory.setStatus("USED");
 
@@ -201,14 +206,18 @@ public class CouponService {
 
         // 쿠폰 사용 취소 처리
         // 만약 쿠폰 기간이 만료된 경우 취소 불가 처리
-        if(userCouponInventory.getStatus().equals("USED") && nowDateTime.isBefore(userCouponInventory.getExpireTime())){
+        if(userCouponInventory.getStatus().equals("USED")){
+            if(!nowDateTime.isBefore(userCouponInventory.getExpireTime())) {
+                throw CouponException.COUPON_EXPIRED;
+            }
+
             CouponInventory couponInventory = userCouponInventory;
             couponInventory.setUseTime(null);
             couponInventory.setStatus("NOT_USED");
 
             couponInventoryRepository.save(couponInventory);
         } else {
-            throw CouponException.COUPON_EXPIRED;
+            throw CouponException.COUPON_NOT_EXIST;
         }
     }
 
