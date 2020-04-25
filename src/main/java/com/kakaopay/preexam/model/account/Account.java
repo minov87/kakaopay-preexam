@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @Entity(name = "Account")
-@Table(name = "accounts")
+@Table(name = "accounts", indexes = {@Index(columnList = "name")})
 public class Account implements Serializable {
     private static final long serialVersionUID = 3597051251082801705L;
 
