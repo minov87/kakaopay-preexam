@@ -303,6 +303,33 @@ public class CouponServiceTest {
     }
 
     @Test
+    @DisplayName("지급된 쿠폰 사용시 쿠폰 기간이 만료된 경우 취소 에러 반환 테스트")
+    public void testCouponRedeemCouponExpiredException() {
+        // 사용자 검증 대비
+        setAccountData();
+
+        // 메칭되는 쿠폰 보관함의 쿠폰정보 등록 (미사용된 형태 + 기간 만료)
+        when(couponInventoryRepository.findMatchedCouponInventoryDetail(1L, couponInventoryResult.getCouponCode())).thenReturn(
+                Optional.of(CouponInventory.builder()
+                        .id(1L)
+                        .status("NOT_USED")
+                        .useTime(nowDateTime)
+                        .createTime(nowDateTime)
+                        .expireTime(alreadyExpireDateTime)
+                        .build()));
+
+        CouponParams couponParams = new CouponParams();
+        couponParams.setAccountId(1L);
+        couponParams.setCouponCode(couponInventoryResult.getCouponCode());
+
+        // 반환 예상되는 에러를 검증
+        couponException = assertThrows(CouponException.class, () ->
+                couponService.couponRedeem(couponParams));
+        assertEquals(RESPONSE_STATUS.COUPON_EXPIRED.getMessage(), couponException.getMessage());
+        assertEquals(RESPONSE_STATUS.COUPON_EXPIRED.getCode(), couponException.getErrorCode());
+    }
+
+    @Test
     @DisplayName("지급된 쿠폰 사용 취소 테스트")
     public void testCouponRedeemCancel() {
         // 사용자 검증 대비
@@ -364,7 +391,7 @@ public class CouponServiceTest {
         // 사용자 검증 대비
         setAccountData();
 
-        // 메칭되는 쿠폰 보관함의 쿠폰정보 등록 (이미 사용처리된 형태로)
+        // 메칭되는 쿠폰 보관함의 쿠폰정보 등록 (이미 사용처리된 형태 + 기간 만료)
         when(couponInventoryRepository.findMatchedCouponInventoryDetail(1L, couponInventoryResult.getCouponCode())).thenReturn(
                 Optional.of(CouponInventory.builder()
                         .id(1L)
