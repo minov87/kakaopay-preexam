@@ -18,12 +18,22 @@ spring:
     generate-ddl: true
     properties:
       hibernate:
+        jdbc:
+          batch_size: 200
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
         enable_lazy_load_no_trans: true
-
   h2:
     console:
       enabled: true
       path: /h2
+
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
 
 #LOG
 logging:
