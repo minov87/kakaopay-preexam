@@ -10,6 +10,7 @@ import com.kakaopay.preexam.model.coupon.Coupon;
 import com.kakaopay.preexam.model.coupon.CouponInventory;
 import com.kakaopay.preexam.model.coupon.CouponInventoryResult;
 import com.kakaopay.preexam.model.coupon.CouponParams;
+import com.kakaopay.preexam.model.response.RESPONSE_STATUS;
 import com.kakaopay.preexam.repository.account.AccountRepository;
 import com.kakaopay.preexam.repository.coupon.CouponInventoryRepository;
 import com.kakaopay.preexam.repository.coupon.CouponRepository;
@@ -113,8 +114,21 @@ public class CouponServiceTest {
         // 생성될 쿠폰 갯수를 1개 이하로 요청했을 경우 반환 예상되는 에러를 검증
         baseException = assertThrows(BaseException.class, () ->
                 couponService.makeCoupon(couponParams));
-        assertEquals("Wrong Parameter", baseException.getMessage());
-        assertEquals(203, baseException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.BAD_REQUEST.getMessage(), baseException.getMessage());
+        assertEquals(RESPONSE_STATUS.BAD_REQUEST.getCode(), baseException.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("쿠폰 생성시 요청 갯수가 제한된 갯수를 초과하였을 경우 에러 테스트")
+    public void testMakeCouponCountOverException() {
+        CouponParams couponParams = new CouponParams();
+        couponParams.setCount(1000001);
+
+        // 생성될 쿠폰 갯수를 100만개 이상으로 요청했을 경우 반환 예상되는 에러를 검증
+        couponException = assertThrows(CouponException.class, () ->
+                couponService.makeCoupon(couponParams));
+        assertEquals(RESPONSE_STATUS.COUPON_MAKE_COUNT_OVER.getMessage(), couponException.getMessage());
+        assertEquals(RESPONSE_STATUS.COUPON_MAKE_COUNT_OVER.getCode(), couponException.getErrorCode());
     }
 
     @Test
@@ -154,8 +168,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         accountException = assertThrows(AccountException.class, () ->
                 couponService.couponGive(couponParams));
-        assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(211, accountException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getMessage(), accountException.getMessage());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getCode(), accountException.getErrorCode());
     }
 
     @Test
@@ -170,8 +184,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponGive(couponParams));
-        assertEquals("Coupon not enough", couponException.getMessage());
-        assertEquals(214, couponException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.COUPON_NOT_ENOUGH.getMessage(), couponException.getMessage());
+        assertEquals(RESPONSE_STATUS.COUPON_NOT_ENOUGH.getCode(), couponException.getErrorCode());
     }
 
     @Test
@@ -207,8 +221,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         accountException = assertThrows(AccountException.class, () ->
                 couponService.getGiveCouponList(couponParams));
-        assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(211, accountException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getMessage(), accountException.getMessage());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getCode(), accountException.getErrorCode());
     }
 
     @Test
@@ -240,8 +254,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         accountException = assertThrows(AccountException.class, () ->
                 couponService.couponRedeem(couponParams));
-        assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(211, accountException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getMessage(), accountException.getMessage());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getCode(), accountException.getErrorCode());
     }
 
     @Test
@@ -257,8 +271,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeem(couponParams));
-        assertEquals("Coupon not exist", couponException.getMessage());
-        assertEquals(215, couponException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.COUPON_NOT_EXIST.getMessage(), couponException.getMessage());
+        assertEquals(RESPONSE_STATUS.COUPON_NOT_EXIST.getCode(), couponException.getErrorCode());
     }
 
     @Test
@@ -284,8 +298,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeem(couponParams));
-        assertEquals("Coupon already used", couponException.getMessage());
-        assertEquals(216, couponException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.COUPON_ALREADY_USED.getMessage(), couponException.getMessage());
+        assertEquals(RESPONSE_STATUS.COUPON_ALREADY_USED.getCode(), couponException.getErrorCode());
     }
 
     @Test
@@ -323,8 +337,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         accountException = assertThrows(AccountException.class, () ->
                 couponService.couponRedeemCancel(couponParams));
-        assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(211, accountException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getMessage(), accountException.getMessage());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getCode(), accountException.getErrorCode());
     }
 
     @Test
@@ -340,8 +354,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeemCancel(couponParams));
-        assertEquals("Coupon not exist", couponException.getMessage());
-        assertEquals(215, couponException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.COUPON_NOT_EXIST.getMessage(), couponException.getMessage());
+        assertEquals(RESPONSE_STATUS.COUPON_NOT_EXIST.getCode(), couponException.getErrorCode());
     }
 
     @Test
@@ -367,8 +381,8 @@ public class CouponServiceTest {
         // 반환 예상되는 에러를 검증
         couponException = assertThrows(CouponException.class, () ->
                 couponService.couponRedeemCancel(couponParams));
-        assertEquals("Coupon expired", couponException.getMessage());
-        assertEquals(217, couponException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.COUPON_EXPIRED.getMessage(), couponException.getMessage());
+        assertEquals(RESPONSE_STATUS.COUPON_EXPIRED.getCode(), couponException.getErrorCode());
     }
 
     @Test

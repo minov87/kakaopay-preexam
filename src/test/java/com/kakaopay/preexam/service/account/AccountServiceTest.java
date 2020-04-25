@@ -3,6 +3,7 @@ package com.kakaopay.preexam.service.account;
 import com.kakaopay.preexam.dto.account.AccountDto;
 import com.kakaopay.preexam.exception.AccountException;
 import com.kakaopay.preexam.model.account.Account;
+import com.kakaopay.preexam.model.response.RESPONSE_STATUS;
 import com.kakaopay.preexam.model.token.Token;
 import com.kakaopay.preexam.repository.account.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -70,8 +71,8 @@ public class AccountServiceTest {
 
         accountException = assertThrows(AccountException.class, () ->
                 accountService.signUp(accountDto));
-        assertEquals("Account already exist", accountException.getMessage());
-        assertEquals(210, accountException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_ALREADY_EXIST.getMessage(), accountException.getMessage());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_ALREADY_EXIST.getCode(), accountException.getErrorCode());
     }
 
     @Test
@@ -94,8 +95,8 @@ public class AccountServiceTest {
     public void testSignInAccountNotExistException() {
         accountException = assertThrows(AccountException.class, () ->
                 accountService.signIn(accountDto));
-        assertEquals("Account not exist", accountException.getMessage());
-        assertEquals(211, accountException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getMessage(), accountException.getMessage());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_NOT_EXIST.getCode(), accountException.getErrorCode());
     }
 
     @Test
@@ -109,7 +110,7 @@ public class AccountServiceTest {
                         .build()));
         accountException = assertThrows(AccountException.class, () ->
                 accountService.signIn(accountDto));
-        assertEquals("Account password is wrong", accountException.getMessage());
-        assertEquals(212, accountException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_WRONG_PASSWORD.getMessage(), accountException.getMessage());
+        assertEquals(RESPONSE_STATUS.ACCOUNT_WRONG_PASSWORD.getCode(), accountException.getErrorCode());
     }
 }

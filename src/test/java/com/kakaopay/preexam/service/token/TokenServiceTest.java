@@ -2,6 +2,7 @@ package com.kakaopay.preexam.service.token;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kakaopay.preexam.exception.TokenException;
+import com.kakaopay.preexam.model.response.RESPONSE_STATUS;
 import com.kakaopay.preexam.model.token.Token;
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.jupiter.api.DisplayName;
@@ -52,21 +53,22 @@ public class TokenServiceTest {
         // 토큰 값이 Null 일 경우 에러 확인
         tokenException = assertThrows(TokenException.class, () ->
                 tokenService.verifyToken(null));
-        assertEquals("Token Empty", tokenException.getMessage());
-        assertEquals(209, tokenException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.TOKEN_EMPTY.getMessage(), tokenException.getMessage());
+        assertEquals(RESPONSE_STATUS.TOKEN_EMPTY.getCode(), tokenException.getErrorCode());
 
         // 만료 토큰 검증 및 토큰 에러 확인
         tokenException = assertThrows(TokenException.class, () ->
                 tokenService.verifyToken(expiredToken));
-        assertEquals("Token expired", tokenException.getMessage());
-        assertEquals(208, tokenException.getErrorCode());
+        assertEquals(RESPONSE_STATUS.TOKEN_EXPIRED.getMessage(), tokenException.getMessage());
+        assertEquals(RESPONSE_STATUS.TOKEN_EXPIRED.getCode(), tokenException.getErrorCode());
 
         // 데이터 변조 토큰 검증 및 토큰 에러 확인
         tokenException = assertThrows(TokenException.class, () ->
                 tokenService.verifyToken(useAbleToken.concat("__Modify")));
-        assertEquals("Token verify fail", tokenException.getMessage());
-        assertEquals(206, tokenException.getErrorCode(), "");
+        assertEquals(RESPONSE_STATUS.TOKEN_VERIFY_FAIL.getMessage(), tokenException.getMessage());
+        assertEquals(RESPONSE_STATUS.TOKEN_VERIFY_FAIL.getCode(), tokenException.getErrorCode(), "");
 
+        // 토큰 검증 후 반환 데이터 검증
         assertTrue((Boolean) tokenService.verifyToken(useAbleToken).get("result"));
         assertEquals(1L, Long.parseLong(tokenService.verifyToken(useAbleToken).get("accountId").toString()));
     }
