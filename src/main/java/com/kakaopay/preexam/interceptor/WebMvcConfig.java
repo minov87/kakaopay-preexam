@@ -16,7 +16,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(handlerInterceptor)
-                .addPathPatterns("/**");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/favicon.ico") // favicon
+                .excludePathPatterns("/h2/**");      // h2 정보페이지
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 }
