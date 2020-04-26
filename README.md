@@ -102,5 +102,5 @@
     |---|---|---|
     | Driver Class | org.h2.Driver |  |
     | JDBC URL | jdbc:h2:mem:preexam |  |
-    | User Name | minov |  |
+    | User Name | sa |  |
     | Password |  | 별도로 지정하지 않음. |
