@@ -2,13 +2,14 @@
 
 > Rest API 기반 쿠폰시스템 개발
 
-## 개발 프레임워크
+## 개발 프레임워크 및 라이브러리
 * Java 1.8
 * Spring Boot 2.2.6
 * JPA
 * JUnit5
 * Gradle
 * Lombok
+* H2 Embedded DB
 
 ## 문제해결 전략
 ### 필수 문제 
@@ -89,7 +90,12 @@
   - 설치 방법은 [gradle 공식사이트](https://gradle.org/install/) 를 통해서 확인한다.
 - `gradle build && java -jar build/libs/kakaopay_preexam-0.0.1.jar`
 - 서비스 시작이 완료되면 http://localhost:8080 호출시 아래의 정보가 노출되면 정상 구동한 것으로 판단한다.  
-  `{"code":200,"data":"Welcome to KakaoPay Pre-exam API"}`
+  ```json
+  {
+    "code": 200,
+    "data": "Welcome to KakaoPay Pre-exam API"
+  }
+  ```  
 - 개발의 편의성 및 자체 구동시 용이함을 위해 H2 Embedded DB를 사용 하였으며, 웹에서의 접속시 접근정보는 아래의 표를 참고한다.
 
     | field | value | etc |
