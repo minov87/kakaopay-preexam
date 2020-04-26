@@ -21,7 +21,7 @@ public class CouponUtilTest {
 
         // 생성된 쿠폰의 패턴 체크
         String gubunKey = "KP".concat(String.valueOf(Year.now().getValue()).substring(2, 4));
-        Pattern p = Pattern.compile("^([A-Z0-9]{4})-"+gubunKey+"-([A-Z0-9]{4})-([A-Z0-9]{4})");
+        Pattern p = Pattern.compile("^([A-Za-z0-9]{4})-"+gubunKey+"-([A-Za-z0-9]{4})-([A-Za-z0-9]{4})");
         Matcher m = p.matcher(couponStr);
         assertTrue(m.find());
     }
