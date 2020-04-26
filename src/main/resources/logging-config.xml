@@ -2,7 +2,7 @@
 <!DOCTYPE configuration >
 <configuration status="WARN">
     <property name="LOG_PROJECT_NAME" value="kakaopay-preexam" />
-    <property name="LOG_DIR" value="~/kakaopay-preexam/logs" />
+    <property name="LOG_DIR" value="./logs" />
     <property name="LOG_LEVEL" value="INFO" />
 
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender" target="SYSTEM_OUT">
