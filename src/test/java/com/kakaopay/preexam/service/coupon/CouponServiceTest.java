@@ -198,7 +198,7 @@ public class CouponServiceTest {
         List<CouponInventoryResult> couponInventoryResultList = new ArrayList<>();
         couponInventoryResultList.add(couponInventoryResult);
 
-        when(couponInventoryRepository.findUserCouponList(1L)).thenReturn(
+        when(couponInventoryRepository.findUserCouponList(1L, 0)).thenReturn(
                 couponInventoryResultList);
 
         CouponParams couponParams = new CouponParams();
@@ -421,12 +421,13 @@ public class CouponServiceTest {
         List<CouponInventoryResult> couponInventoryResultList = new ArrayList<>();
         couponInventoryResultList.add(couponInventoryResult);
 
-        when(couponInventoryRepository.findExpiredCouponList(starTime, nowDateTime)).thenReturn(
+        when(couponInventoryRepository.findExpiredCouponList(starTime, nowDateTime, 0)).thenReturn(
                 couponInventoryResultList);
 
+        CouponParams couponParams = new CouponParams();
         // 발급된 쿠폰 중 당일 만료된 쿠폰 목록 조회 결과 에러 없음 확인
         assertDoesNotThrow(() ->
-                couponService.getExpiredCouponList());
+                couponService.getExpiredCouponList(couponParams));
     }
 
     // 로그인 mockup 데이터 생성
