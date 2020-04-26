@@ -81,9 +81,9 @@
   
 - [DB ERD](https://www.erdcloud.com/d/o5MEyDk9nRgfZYNSN)
 
-- 그 외 추가하면 좋을 부분들.
+- 그 외 TO-DO
   - @EnableCaching 사용하여 캐시 처리
-  - 조회 API 의 페이징 기능 추가
+  - 조회 API 의 페이징 기능 추가 => NativeNamedQuery 방식에서 일반 NativeQuery + Pageable 적용 방식 또는 아예 JPA 로 재구성 필요.
 
 ## 빌드 및 실행방법
 - 하단 빌드 실행 전 gradle 이 설치되어 있어야 한다.
