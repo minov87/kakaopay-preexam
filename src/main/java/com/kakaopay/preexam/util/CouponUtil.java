@@ -16,6 +16,7 @@ public final class CouponUtil {
     private static class Charset {
         private static final String ALPHA_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static final String ALPHANUMBER_UPPER = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private static final String ALPAHNUMBER_COMBINE = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static final String NUMBER = "0123456789";
     }
 
@@ -25,7 +26,7 @@ public final class CouponUtil {
     private static class Config {
         private static final int length = 16;
         private static final String pattern = "####-KP$$-####-####";
-        private static final String charset = Charset.ALPHANUMBER_UPPER;
+        private static final String charset = Charset.ALPAHNUMBER_COMBINE;
         private static final char patternPlaceholder = '#';
     }
 
