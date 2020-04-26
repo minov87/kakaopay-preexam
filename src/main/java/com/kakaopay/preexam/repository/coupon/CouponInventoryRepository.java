@@ -22,10 +22,13 @@ public interface CouponInventoryRepository extends JpaRepository<CouponInventory
             @Param("couponCode") String couponCode);
 
     @Query(nativeQuery = true)
-    List<CouponInventoryResult> findUserCouponList(@Param("accountId") Long accountId);
+    List<CouponInventoryResult> findUserCouponList(
+            @Param("accountId") Long accountId,
+            @Param("pagePerCount") int pagePerCount);
 
     @Query(nativeQuery = true)
     List<CouponInventoryResult> findExpiredCouponList(
             @Param("starTime") LocalDateTime starTime,
-            @Param("endTime") LocalDateTime endTime);
+            @Param("endTime") LocalDateTime endTime,
+            @Param("pagePerCount") int pagePerCount);
 }

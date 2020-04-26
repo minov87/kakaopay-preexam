@@ -59,7 +59,7 @@ public class CouponController {
     /**
      * 사용자 지급 쿠폰 조회 API
      *
-     * @param param 사용자 ID
+     * @param param 사용자 ID지, 페이지
      * @return
      * @throws Exception
      */
@@ -113,12 +113,14 @@ public class CouponController {
     /**
      * 발급된 쿠폰 중 당일 만료된 쿠폰 목록 조회 API
      *
+     * @param param 페이지
      * @return
      * @throws Exception
      */
     @GetMapping(value = "/expired/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response getExpiredCouponList() throws Exception {
-        List<CouponInventoryResult> couponInventoryResultList = couponService.getExpiredCouponList();
+    public Response getExpiredCouponList(
+            @RequestBody(required = true) CouponParams param) throws Exception {
+        List<CouponInventoryResult> couponInventoryResultList = couponService.getExpiredCouponList(param);
         return Response.builder().code(RESPONSE_STATUS.SUCCESS.getCode()).data(couponInventoryResultList).build();
     }
 }

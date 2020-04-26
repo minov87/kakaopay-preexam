@@ -152,7 +152,7 @@ public class CouponService {
         Account account = accountRepository.findById(params.getAccountId())
                 .orElseThrow(() -> AccountException.ACCOUNT_NOT_EXIST);
 
-        return couponInventoryRepository.findUserCouponList(params.getAccountId());
+        return couponInventoryRepository.findUserCouponList(params.getAccountId(), params.getPagePerCount());
     }
 
     /**
@@ -224,13 +224,14 @@ public class CouponService {
     /**
      * 발급된 쿠폰 중 당일 만료된 쿠폰 목록 조회
      *
+     * @param params
      * @return
      * @throws Exception
      */
-    public List<CouponInventoryResult> getExpiredCouponList() throws Exception {
+    public List<CouponInventoryResult> getExpiredCouponList(CouponParams params) throws Exception {
         LocalDateTime starTime = nowDateTime.with(LocalTime.MIN);
 
         // 사용자에게 발급된 쿠폰 중 당일 만료 쿠폰 조회
-        return couponInventoryRepository.findExpiredCouponList(starTime, nowDateTimeMod);
+        return couponInventoryRepository.findExpiredCouponList(starTime, nowDateTimeMod, params.getPagePerCount());
     }
 }

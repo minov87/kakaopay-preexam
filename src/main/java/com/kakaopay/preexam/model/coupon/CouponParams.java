@@ -18,4 +18,11 @@ public class CouponParams {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String expireTime;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private int page;
+
+    public int getPagePerCount() {
+        return this.page > 0 ? (this.page-1) * 10 : 0;
+    }
 }

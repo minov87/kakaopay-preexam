@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
                         "FROM coupon_inventory AS ci " +
                         "INNER JOIN coupons AS c ON ci.coupon_id = c.id " +
                         "WHERE ci.account_id = :accountId " +
-                        "ORDER BY ci.id DESC",
+                        "ORDER BY ci.id DESC " +
+                        "LIMIT :pagePerCount, 10",
                 resultClass = CouponInventoryResult.class),
         @NamedNativeQuery(
                 name = "CouponInventory.findExpiredCouponList",
@@ -27,7 +28,8 @@ import java.time.LocalDateTime;
                         "FROM coupon_inventory AS ci " +
                         "INNER JOIN coupons AS c ON ci.coupon_id = c.id " +
                         "WHERE ci.expire_time BETWEEN :starTime AND :endTime " +
-                        "ORDER BY ci.id DESC",
+                        "ORDER BY ci.id DESC " +
+                        "LIMIT :pagePerCount, 10",
                 resultClass = CouponInventoryResult.class)
 })
 @Data
